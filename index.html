@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Cloud</title>
+        <script src="js/Three.js"></script>
+        <script src="js/Stats.js"></script>
+        <link rel="stylesheet" href="css/styles.css">
+        
+        <script>
+            var renderer;
+            var stats;
+            function initThree() {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                renderer = new THREE.WebGLRenderer({
+                    antialias : true
+                });
+                renderer.setSize(width, height);
+                renderer.setClearColor(0x87ceeb, 1.0);
+                document.getElementById('canvas').appendChild(renderer.domElement);
+
+                stats = new Stats();
+                stats.domElement.style.position = 'absolute';
+                stats.domElement.style.left = '0px';
+                stats.domElement.style.top = '0px';
+                document.getElementById('canvas').appendChild(stats.domElement);
+            }
+
+            var scene;
+            function initScene() {
+                scene = new THREE.Scene();
+            }
+
+            var light;
+            function initLight() {
+                light = new THREE.DirectionalLight(0xffffff, 1);
+                light.position.set(0, 0, 1);
+                scene.add(light);
+            }
+
+            var camera;
+            function initCamera() {
+                camera = new THREE.PerspectiveCamera(80, width/height, 1, 10000);
+                camera.position.z = 1000;
+                scene.add(camera);
+            }
+
+            function initParticle(){
+                let loader = new THREE.TextureLoader();
+                loader.load('images/cloud3.png', function(texture){
+                    portalGeo = new THREE.PlaneBufferGeometry(350, 350);
+                    portalMaterial = new THREE.MeshStandardMaterial({
+                        map:texture,
+                        transparent:true
+                    });
+                    let particle = new THREE.Mesh(portalGeo, portalMaterial);
+                    particle.position.set(2, 2, 2);
+                    scene.add(particle);
+                });
+            }
+
+            function render(){
+                // camera.position.x = camera.position.x +1;
+                // camera.rotation.y = camera.rotation.y +0.01;
+                renderer.render(scene, camera);
+                requestAnimationFrame(render);
+                stats.update();
+            }
+
+            function threeStart() {
+                initThree();
+                initScene();
+                initCamera();
+                initLight();
+                initParticle();
+                render();
+            }
+        </script>
+    </head>
+
+    <body onload="threeStart();">
+        <div id="canvas"></div>
+    </body>
+</html>
