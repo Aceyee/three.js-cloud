@@ -43,19 +43,21 @@
             function initCamera() {
                 camera = new THREE.PerspectiveCamera(80, width/height, 1, 10000);
                 camera.position.z = 1000;
+                camera.lookAt(1, 1000*Math.cos(Math.PI / 3), 0);
                 scene.add(camera);
             }
 
-            function initParticle(){
+            function initCloud(){
                 let loader = new THREE.TextureLoader();
-                loader.load('images/cloud3.png', function(texture){
-                    portalGeo = new THREE.PlaneBufferGeometry(350, 350);
+                loader.load('images/noise_worley.png', function(texture){
+                    portalGeo = new THREE.PlaneBufferGeometry(512, 512);
                     portalMaterial = new THREE.MeshStandardMaterial({
                         map:texture,
                         transparent:true
                     });
                     let particle = new THREE.Mesh(portalGeo, portalMaterial);
-                    particle.position.set(2, 2, 2);
+                    particle.rotation.x = 1.2;
+                    particle.position.set(0, 1000, 0);
                     scene.add(particle);
                 });
             }
@@ -73,7 +75,7 @@
                 initScene();
                 initCamera();
                 initLight();
-                initParticle();
+                initCloud();
                 render();
             }
         </script>
